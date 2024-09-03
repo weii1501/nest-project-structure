@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface NormalResponse {
-  code: number;
+  // code: number;
   data: any;
   message: string;
   status: string;

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-end */
 import { Injectable, ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { UserPayload } from './auth.interface';
 

@@ -32,7 +32,7 @@ export class AuthenticationService {
     if (!this.jwt.verify(refreshToken, { secret: this.config.get('jwtSecret') })) {
       return false;
     }
-    const payload = <{ sub: string }>this.jwt.decode(refreshToken);
+    const payload = <{ sub: number }>this.jwt.decode(refreshToken);
     return payload.sub === data.userId;
   }
 
@@ -48,7 +48,7 @@ export class AuthenticationService {
     };
   }
 
-  private getRefreshToken(sub: string): string {
+  private getRefreshToken(sub: number): string {
     return this.jwt.sign(
       { sub },
       {

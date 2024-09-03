@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable  */
 import { IsNotEmpty, IsString, IsEmail, MinLength } from 'class-validator';
 
 export class RegisterDto {

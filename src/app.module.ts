@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth';
 import { ClientModule } from './modules/client/client.module';
 import { CommonModule, ExceptionsFilter, LoggerMiddleware } from './modules/common';
 import { MessageModule } from './modules/message';
+import { TaskModule } from './modules/task';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { MessageModule } from './modules/message';
     ClientModule,
     AuthModule,
     MessageModule,
+    TaskModule
   ],
   controllers: [],
   providers: [

@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 
 import { NormalResponse } from '../../share';
+import { classToPlain } from 'class-transformer';
 
 type TemplateParameter = any[];
 
@@ -66,19 +67,19 @@ export class UtilService {
 
   public buildSuccessResponse(data: any): NormalResponse {
     return {
-      code: 0,
+      // code: 0,
       message: '',
-      data,
+      data: data,
       status: 'success',
     };
   }
 
-  public buildCustomResponse(code: number, data: any, message: string): NormalResponse {
+  public buildCustomResponse(data: any, message: string): NormalResponse {
     return {
-      code,
+      // code,
       message,
       data,
-      status: code === 0 ? 'success' : 'fail',
+      status: 'success',
     };
   }
 

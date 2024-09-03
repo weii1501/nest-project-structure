@@ -1,11 +1,16 @@
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Roles } from './role.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
+
+import { Roles } from './role.entity';
+import { Task } from '../task/task.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    name: 'id',
+  })
+  id: number;
 
   @Column('varchar', {
     nullable: false,
@@ -31,13 +36,19 @@ export class User extends BaseEntity {
   @ManyToMany(() => Roles, (roles) => roles.id)
   roles!: Roles[];
 
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
+
+  @Exclude()
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Exclude()
+  @UpdateDateColumn()
+  updatedAt: Date;
+
   constructor(partial: Partial<User>) {
     super();
     Object.assign(this, partial);
-  }
-
-  @Expose()
-  get fullName(): string {
-    return `fulname is ${this.name}`;
   }
 }

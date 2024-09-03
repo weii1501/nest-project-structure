@@ -63,6 +63,7 @@ export class AuthService {
     return this.util.buildSuccessResponse(user);
   }
 
+
   public async checkAuth() {
     return this.util.buildSuccessResponse('Auth is working');
   }
