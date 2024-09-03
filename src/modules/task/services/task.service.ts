@@ -25,30 +25,36 @@ export class TaskService {
     const newTask = new Task({
       title: task.title,
       description: task.description,
-      user: newUser,
+      createdBy: newUser,
     });
+
+    if (!!task.assignedUsers) {
+      const listUserId = task.assignedUsers.split(',');
+      const assignedUsers = await this.userRepository.findByIds(listUserId);
+      newTask.assignedUsers = assignedUsers;
+    }
 
     await this.taskRepository.save(newTask);
     return this.utils.buildSuccessResponse(newTask);
   }
 
   public async getTasks(user: UserPayload): Promise<NormalResponse> {
-    const tasks = await this.taskRepository.find({ where: { user: { id: user.id } } });
+    const tasks = await this.taskRepository.find({ where: { createdBy: { id: user.id } } });
     return this.utils.buildSuccessResponse(tasks);
   }
 
   public async getTask(user: UserPayload, id: number): Promise<NormalResponse> {
-    const task = await this.taskRepository.findOne({ where: { user: { id: user.id }, id: id } });
+    const task = await this.taskRepository.findOne({ where: { createdBy: { id: user.id }, id: id } });
 
     if (!!!task) {
-        throw new HttpException('Task not found', 404);
+      throw new HttpException('Task not found', 404);
     }
 
     return this.utils.buildSuccessResponse(task);
   }
 
   public async deleteTask(user: UserPayload, id: number): Promise<NormalResponse> {
-    const task = await this.taskRepository.findOne({ where: { user: { id: user.id }, id: id } });
+    const task = await this.taskRepository.findOne({ where: { createdBy: { id: user.id }, id: id } });
 
     if (!task) {
       throw new Error('Task not found');
@@ -59,7 +65,7 @@ export class TaskService {
   }
 
   public async updateTask(user: UserPayload, id: number, task: TaskUpdateDto): Promise<NormalResponse> {
-    const taskToUpdate = await this.taskRepository.findOne({ where: { user: { id: user.id }, id: id } });
+    const taskToUpdate = await this.taskRepository.findOne({ where: { createdBy: { id: user.id }, id: id } });
 
     if (!taskToUpdate) {
       throw new Error('Task not found');
@@ -68,12 +74,19 @@ export class TaskService {
     taskToUpdate.title = task.title;
     taskToUpdate.description = task.description;
     taskToUpdate.status = task.status;
-    
+
     if (!!task.startDate) {
       taskToUpdate.startDate = new Date(task.startDate);
     }
+
     if (!!task.endDate) {
       taskToUpdate.endDate = new Date(task.endDate);
+    }
+
+    if (!!task.assignedUsers) {
+      const listUserId = task.assignedUsers.split(',');
+      const assignedUsers = await this.userRepository.findByIds(listUserId);
+      taskToUpdate.assignedUsers = assignedUsers;
     }
 
     await this.taskRepository.save(taskToUpdate);

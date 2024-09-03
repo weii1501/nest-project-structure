@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { User } from '../user';
 import { Exclude } from 'class-transformer';
 
@@ -60,8 +60,22 @@ export class Task extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.tasks, { eager: true })
-  user: User;
+  @ManyToOne(() => User, (user) => user.createTasks, { eager: true })
+  createdBy: User;
+
+  @ManyToMany(() => User, (user) => user.assignedTasks, { eager: true })
+  @JoinTable({
+    name: 'task_users', // tên bảng trung gian
+    joinColumn: {
+      name: 'task_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  assignedUsers: User[];
 
   constructor(partial: Partial<Task>) {
     super();

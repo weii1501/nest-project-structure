@@ -36,8 +36,11 @@ export class User extends BaseEntity {
   @ManyToMany(() => Roles, (roles) => roles.id)
   roles!: Roles[];
 
-  @OneToMany(() => Task, (task) => task.user)
-  tasks: Task[];
+  @OneToMany(() => Task, (task) => task.createdBy)
+  createTasks: Task[];
+
+  @ManyToMany(() => Task, (task) => task.assignedUsers)
+  assignedTasks: Task[];
 
   @Exclude()
   @CreateDateColumn()

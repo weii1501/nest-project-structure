@@ -15,6 +15,9 @@ export class TaskDto {
 
   @IsString()
   description: string;
+
+  @IsString()
+  assignedUsers: string;
 }
 
 export class TaskUpdateDto {
@@ -39,4 +42,8 @@ export class TaskUpdateDto {
   @IsOptional()
   @IsDateString()
   endDate?: string;
+
+  @IsOptional()
+  @IsString()
+  assignedUsers?: string;
 }
